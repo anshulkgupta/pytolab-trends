@@ -5,7 +5,7 @@ import logging
 import time
 import json
 import sys
-
+import credentials
 import tweepy
 
 import config
@@ -54,9 +54,12 @@ class Tweets(Daemon):
         """
         listener = Listener()
         listener.set_tweets(self)
+        auth = OAuthHandler(credentials.consumer_key, 
+        credentials.consumer_secret)
+        auth.set_access_token(credentials.access_token,
+        credentials.access_token_secret)
         self.stream = tweepy.Stream(
-            self.config.get('twitter', 'userid'),
-            self.config.get('twitter', 'password'),
+            auth,
             listener,
             timeout=3600
         )
